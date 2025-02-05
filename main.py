@@ -1,0 +1,32 @@
+# This is the main entry point of the FastAPI application.
+# It defines the API endpoints and handles HTTP requests.
+# It connects to the database, processes business logic, and returns responses.
+
+from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy.orm import Session
+from database import SessionLocal, engine
+import models
+from schemas import ResumeSchema
+
+app = FastAPI()
+
+# Create Database
+models.Base.metadata.create_all(bind=engine)
+
+
+# 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@app.get("/api/resumes/{resume_id}", response_model=ResumeSchema)
+def get_resume_data(resume_id: int, db: Session = Depends(get_db)):
+    resume = db.query(models.Resume).filter(models.Resume.id == resume_id).first()
+    if not resume:
+        raise HTTPException(status_code=404, detail="Resume not found")
+    return resume
+
