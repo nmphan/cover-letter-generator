@@ -2,7 +2,7 @@
 # It uses SQLAlchemy ORM to create the 'Resume' model.
 # It maps the database tables to Python objects for easy manipulation.
 
-from sqlachemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String
 from database import Base
 
 
