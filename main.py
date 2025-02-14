@@ -42,9 +42,6 @@ app.add_middleware(
 
 @app.post("/api/parse-resume")
 async def upload_file(file: UploadFile = File(...)):
-    try:
-        content = parse_file(file.file, file.filename)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal Server Error") from e
+    content = parse_file(file.file, file.filename)
     return Response(content=content, media_type="application/json")
 
