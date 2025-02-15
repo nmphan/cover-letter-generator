@@ -45,3 +45,6 @@ async def upload_file(file: UploadFile = File(...)):
     content = parse_file(file.file, file.filename)
     return Response(content=content, media_type="application/json")
 
+@app.post("/api/parse-job-description")
+async def upload_job_description(description: str):
+    raise HTTPException(status_code=501, detail="Not Implemented")
