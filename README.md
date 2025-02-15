@@ -8,7 +8,9 @@ pip install -r requirements.txt
 ```
 Get Free Gemini [API Key](https://aistudio.google.com/app/apikey)
 
-Place api key in .env file (ex GEMINI_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx')
+Place api key in .env file (create new file if one doesnt exist)
+    
+    GEMINI_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 
 Run the development server:
