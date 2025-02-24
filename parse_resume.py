@@ -2,6 +2,8 @@ import pymupdf
 from fastapi import HTTPException
 from google import genai
 from dotenv import load_dotenv
+import docx2txt
+from io import BytesIO
 import os
 
 load_dotenv()
@@ -48,8 +50,24 @@ def extract_pdf(file):
         raise HTTPException(status_code=400, detail="Invalid PDF") from e
     return parse_resume(text)
 
+
 def extract_docx(file):
-    raise HTTPException(status_code=501, detail="Not Implemented")
+    try:
+        # Read the file content as bytes
+        file_content = file.read()
+
+        # Use BytesIO to simulate a file object in memory
+        text = docx2txt.process(BytesIO(file_content))
+
+        if text:
+            print("Text extracted successfully!")
+        else:
+            print("No text extracted.")
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid DOCX file") from e
+
+    return parse_resume(text)
 
 
 def parse_file(file, filename):
