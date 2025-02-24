@@ -1,12 +1,11 @@
 import React from 'react'
-import DragDropFiles from './components/DragDropFiles'
-import Header from './components/Header'
+import Main from './Home Page/page'
 
 
 export default function page() {
   return (
     <div>
-      <Header />
+      <Main />
     </div>
   )
 }
