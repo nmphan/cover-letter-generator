@@ -102,3 +102,5 @@ websocket-client==1.8.0
 widgetsnbextension==4.0.13
 fastapi[all]==0.115.8
 docx2txt == 0.8
+sqlalchemy==2.0.18
+psycopg2-binary==2.9.9
