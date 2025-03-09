@@ -68,3 +68,4 @@ async def preview_resume(file: UploadFile = File(...)):
         return formatted_data
     except Exception as e:
         return {"error": str(e), "preview_available": False}
+    

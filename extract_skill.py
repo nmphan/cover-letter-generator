@@ -5,6 +5,11 @@ from nltk.probability import FreqDist
 import spacy
 import docx
 import fitz  # PyMuPDF
+from fastapi import HTTPException
+from google import genai
+from dotenv import load_dotenv
+import os
+
 
 # Download necessary NLTK data
 nltk.download('punkt')
@@ -12,6 +17,44 @@ nltk.download('stopwords')
 
 # Load Spacy model
 nlp = spacy.load("en_core_web_sm")
+
+# Load GEMINI API client
+load_dotenv()
+api_key = os.getenv('GEMINI_API_KEY')
+client = genai.Client(api_key=api_key)
+
+# Definition of function to parse job description using the same format of the resume parsing function
+def parse_job_description(job_description_text):
+    prompt = f"""
+    Extract the following details from this job description in VALID LIST OF STRINGS. Return this format even if the fields are empty:
+    - title (string - max of 100 characters)
+    - company Name (string - max of 100 characters)
+    - location (string - max of 100 characters)
+    - requirement (list of skills and qualifications)
+    - responsibilities (list of tasks)
+    Do NOT use "null" for empty fields.
+    DO NOT include any formatting that might be present in the job description. (ex bullet points, etc.)
+    Do NOT use markdown. Example format:
+    {{
+        "title": "Software Developer"
+        "company_name": "Tech Company"
+        "location": "New York, NY"
+        "requirements": {"Python", "Java", "SQL"}
+        "responsibilities": {"Develop and maintain web applications"}
+    }}
+    Job Description Text:
+    {job_description_text}
+    """
+
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=prompt
+        )
+        json_data = response.text.replace('```json', '').replace('```', '').replace('\\n', ' ').strip()
+    except Exception as e:
+        raise HTTPException(status_code=503, detail="Service temporarily Unavailable", headers={"Retry-After": "10"}) from e
+    return json_data
 
 def read_docx(file_path):
     doc = docx.Document(file_path)
