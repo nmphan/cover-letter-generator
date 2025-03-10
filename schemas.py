@@ -80,3 +80,20 @@ class CoverLetterRead(BaseModel):
 
     class Config:
         orm_mode = True
+
+# Resume Preview Schema
+class ResumePreviewResponse(BaseModel):
+    personal_info: Dict[str, Any]
+    skills_section: Dict[str, Any]
+    experience_section: Dict[str, Any]
+    education_section: Dict[str, Any]
+    certifications_section: Dict[str, Any]
+    preview_metadata: Dict[str, Any]
+    
+    class Config:
+        orm_mode = True
+
+# Error Response Schema
+class ErrorResponse(BaseModel):
+    error: str
+    preview_available: bool = False

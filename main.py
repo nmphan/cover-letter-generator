@@ -8,8 +8,10 @@ from parse_resume import parse_file
 from sqlalchemy.orm import Session
 from schemas import ResumeCreate, ResumeRead
 from database import get_db
-# from database import engine
 import models
+from preview_formatter import format_resume_preview
+from datetime import datetime
+from typing import Union
 
 app = FastAPI()
 
@@ -72,3 +74,21 @@ def create_resume(
     db.refresh(new_resume)
 
     return new_resume
+
+@app.post("/api/preview-resume")
+async def preview_resume(file: UploadFile = File(...)):
+    """
+    Parse a resume file and return formatted data for preview.
+    """
+    try:
+        # Parse the file using existing parse_file function
+        content_str = parse_file(file.file, file.filename)
+        
+        # Format the parsed content for preview
+        formatted_data = format_resume_preview(content_str)
+        
+        # Return the formatted JSON
+        return formatted_data
+    except Exception as e:
+        return {"error": str(e), "preview_available": False}
+

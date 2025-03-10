@@ -1,0 +1,50 @@
+{
+    "coverLetters": [
+      {
+        "id": "1",
+        "coverLetters": [
+          {
+            "name": "Cover Letter for Software Engineer Position",
+            "dateCreated": "2025-02-25",
+            "status": "draft"
+          },
+          {
+            "name": "Cover Letter for Senior Software Engineer Position",
+            "dateCreated": "2025-02-26",
+            "status": "draft"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "coverLetters": [
+          {
+            "name": "Cover Letter for Marketing Manager Role",
+            "dateCreated": "2025-02-20",
+            "status": "draft"
+          },
+          {
+            "name": "Cover Letter for Digital Marketing Role",
+            "dateCreated": "2025-02-22",
+            "status": "draft"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "coverLetters": [
+          {
+            "name": "Cover Letter for Data Scientist Application",
+            "dateCreated": "2025-01-15",
+            "status": "draft"
+          },
+          {
+            "name": "Cover Letter for Machine Learning Engineer Role",
+            "dateCreated": "2025-01-18",
+            "status": "draft"
+          }
+        ]
+      }
+    ]
+  }
+  
