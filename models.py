@@ -11,7 +11,7 @@ class Resume(Base):
     __tablename__ = "resumes"
 
     id = Column(Integer, primary_key=True, index=True)
-    candidate_name = Column(String(100))
+    candidate_name = Column(String(100), nullable=False)
     contact_info = Column(JSONB)     # JSONB in PostgreSQL
     skills = Column(JSONB)
     experience = Column(JSONB)

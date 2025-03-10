@@ -10,14 +10,14 @@ class ResumeSchema(BaseModel):
     skills: str
     experience: str
     education: str
-    keywords: staticmethod
+    keywords: List[str]
 
     class Config:
         orm_mode = True
 
 # POST
 class ResumeCreate(BaseModel):
-    candidate_name: str
+    candidate_name: Optional[str] = None
     contact_info: Optional[Dict[str, Any]] = None
     skills: Optional[List[str]] = None
     experience: Optional[List[Dict[str, Any]]] = None
