@@ -17,10 +17,6 @@ def qualification_match(job_data, resume_data):
 
     CANDIDATE DATA:
     {resume_data}
-
-    TASKS:
-    1. Mandatory Check: Verify ALL mandatory requirements are met. Reject if any fail.
-    2. Preferred Scoring: Calculate match score (0-100%) using weights.
     
     RULES:
     1. Mandatory Check: Verify if the candidate meets ALL mandatory requirements. Highlight any gaps. Reject if any major requirements are not met(example a senior developer applying for a student intern role)
