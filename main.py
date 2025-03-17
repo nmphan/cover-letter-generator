@@ -5,6 +5,7 @@
 from fastapi import FastAPI, HTTPException, Depends, File, UploadFile, Response
 from starlette.middleware.cors import CORSMiddleware
 from parse_resume import parse_file
+from qualification import qualification_match
 from sqlalchemy.orm import Session
 from schemas import ResumeCreate, ResumeRead
 from database import get_db
@@ -51,6 +52,11 @@ async def upload_file(file: UploadFile = File(...)):
 @app.post("/api/parse-job-description")
 async def upload_job_description(description: str):
     raise HTTPException(status_code=501, detail="Not Implemented")
+
+@app.post("/api/qualification-match")
+async def qualification(job_data, resume_data):
+    content = qualification_match(job_data, resume_data)
+    return Response(content=content, media_type="application/json")
 
 @app.post("/api/save-resumes", response_model=ResumeRead)
 def create_resume(
