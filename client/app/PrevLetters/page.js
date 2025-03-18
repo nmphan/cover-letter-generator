@@ -2,7 +2,7 @@ import React from 'react'
 import coverLettersData from '../Database/CoverLetters.json'
 
 export default function PrevLetters() {
-  const coverLetters = coverLettersData.coverLetters;
+  const {coverLetters} = coverLettersData;
 
   return (
     <>

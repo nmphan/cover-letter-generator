@@ -12,16 +12,17 @@ import os
 
 
 # Download necessary NLTK data
-nltk.download('punkt')
-nltk.download('stopwords')
+nltk.download("punkt")
+nltk.download("stopwords")
 
 # Load Spacy model
 nlp = spacy.load("en_core_web_sm")
 
 # Load GEMINI API client
 load_dotenv()
-api_key = os.getenv('GEMINI_API_KEY')
+api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
+
 
 # Definition of function to parse job description using the same format of the resume parsing function
 def parse_job_description(job_description_text):
@@ -48,30 +49,38 @@ def parse_job_description(job_description_text):
 
     try:
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=prompt
+            model="gemini-2.0-flash", contents=prompt
         )
-        json_data = response.text.replace('```json', '').replace('```', '').replace('\\n', ' ').strip()
+        json_data = (
+            response.text.replace("```json", "")
+            .replace("```", "")
+            .replace("\\n", " ")
+            .strip()
+        )
     except Exception as e:
-        raise HTTPException(status_code=503, detail="Service temporarily Unavailable", headers={"Retry-After": "10"}) from e
+        raise HTTPException(
+            status_code=503,
+            detail="Service temporarily Unavailable",
+            headers={"Retry-After": "10"},
+        ) from e
     return json_data
+
 
 def read_docx(file_path):
     doc = docx.Document(file_path)
     return "\n".join([para.text for para in doc.paragraphs])
 
+
 def read_pdf(file_path):
     doc = fitz.open(file_path)
-    text = ""
-    for page in doc:
-        text += page.get_text()
-    return text
+    return "".join(page.get_text() for page in doc)
+
 
 # Read job description from DOCX or PDF file
-file_path = 'sampleResume/{file_name}'
-if file_path.endswith('.docx'):
+file_path = "sampleResume/{file_name}"
+if file_path.endswith(".docx"):
     job_description = read_docx(file_path)
-elif file_path.endswith('.pdf'):
+elif file_path.endswith(".pdf"):
     job_description = read_pdf(file_path)
 else:
     raise ValueError("Unsupported file format")
@@ -80,8 +89,12 @@ else:
 tokens = word_tokenize(job_description)
 
 # Remove stopwords
-stop_words = set(stopwords.words('english'))
-filtered_tokens = [word for word in tokens if word.lower() not in stop_words and word.isalpha()]
+stop_words = set(stopwords.words("english"))
+filtered_tokens = [
+    word
+    for word in tokens
+    if word.lower() not in stop_words and word.isalpha()
+]
 
 # Calculate frequency distribution
 fdist = FreqDist(filtered_tokens)

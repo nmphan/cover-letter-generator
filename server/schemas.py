@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
+
 class ResumeSchema(BaseModel):
     skills: str
     experience: str
@@ -15,6 +16,7 @@ class ResumeSchema(BaseModel):
     class Config:
         orm_mode = True
 
+
 # POST
 class ResumeCreate(BaseModel):
     candidate_name: Optional[str] = None
@@ -23,6 +25,7 @@ class ResumeCreate(BaseModel):
     experience: Optional[List[Dict[str, Any]]] = None
     education: Optional[List[Dict[str, Any]]] = None
     certifications: Optional[List[str]] = None
+
 
 # GET
 class ResumeRead(BaseModel):
@@ -39,6 +42,7 @@ class ResumeRead(BaseModel):
     class Config:
         orm_mode = True
 
+
 # POST (JOb Description)
 class JobDescriptionCreate(BaseModel):
     title: str
@@ -46,6 +50,7 @@ class JobDescriptionCreate(BaseModel):
     location: Optional[str] = None
     requirements: Optional[List[str]] = None
     responsibilities: Optional[List[str]] = None
+
 
 # GET (JOB Description)
 class JobDescriptionRead(BaseModel):
@@ -61,12 +66,14 @@ class JobDescriptionRead(BaseModel):
     class Config:
         orm_mode = True
 
+
 # POST (Cover letter)
 class CoverLetterCreate(BaseModel):
     resume_id: int
     job_description_id: int
     letter_content: str
     score: Optional[float] = None
+
 
 # GET (Cover letter)
 class CoverLetterRead(BaseModel):
@@ -81,6 +88,7 @@ class CoverLetterRead(BaseModel):
     class Config:
         orm_mode = True
 
+
 # Resume Preview Schema
 class ResumePreviewResponse(BaseModel):
     personal_info: Dict[str, Any]
@@ -89,9 +97,10 @@ class ResumePreviewResponse(BaseModel):
     education_section: Dict[str, Any]
     certifications_section: Dict[str, Any]
     preview_metadata: Dict[str, Any]
-    
+
     class Config:
         orm_mode = True
+
 
 # Error Response Schema
 class ErrorResponse(BaseModel):

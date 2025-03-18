@@ -7,7 +7,7 @@ from io import BytesIO
 import os
 
 load_dotenv()
-api_key = os.getenv('GEMINI_API_KEY')
+api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
 
 
@@ -32,20 +32,27 @@ def parse_resume(resume_text):
     """
     try:
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=prompt
+            model="gemini-2.0-flash", contents=prompt
         )
-        json_data = response.text.replace('```json', '').replace('```', '').replace('\\n', ' ').strip()
+        json_data = (
+            response.text.replace("```json", "")
+            .replace("```", "")
+            .replace("\\n", " ")
+            .strip()
+        )
     except Exception as e:
-        raise HTTPException(status_code=503, detail="Service temporarily Unavailable", headers={"Retry-After": "10"}) from e
+        raise HTTPException(
+            status_code=503,
+            detail="Service temporarily Unavailable",
+            headers={"Retry-After": "10"},
+        ) from e
     return json_data
+
 
 def extract_pdf(file):
     try:
-        text = ""
         doc = pymupdf.open(stream=file.read(), filetype="pdf")
-        for page in doc:
-            text += page.get_text()
+        text = "".join(page.get_text() for page in doc)
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid PDF") from e
     return parse_resume(text)
