@@ -13,6 +13,10 @@ from ..models import Resume
 from ..services.parse_resume import parse_file
 from ..services.qualification import qualification_match
 from ..services.preview_formatter import format_resume_preview
+import os
+import tempfile
+from fastapi import Body
+from ..utils.pdf_generator import generate_cover_letter_pdf, generate_cover_letter_docx
 
 router = APIRouter()
 
@@ -63,3 +67,82 @@ async def preview_resume(file: UploadFile = File(...)):
         return format_resume_preview(content_str)
     except Exception as e:
         return {"error": str(e), "preview_available": False}
+
+@router.post("/api/generate-cover-letter/pdf")
+async def generate_cover_letter_as_pdf(
+    cover_letter_data: dict = Body(...),
+):
+    """
+    Generate a PDF file containing a cover letter.
+    
+    Args:
+        cover_letter_data (dict): Dictionary containing the cover letter content
+    
+    Returns:
+        Response: A response containing the PDF file
+    """
+    try:
+        # Create a temporary file to store the PDF
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+            temp_path = temp_file.name
+        
+        # Generate the PDF
+        generate_cover_letter_pdf(cover_letter_data, temp_path)
+        
+        # Read the PDF
+        with open(temp_path, "rb") as f:
+            pdf_content = f.read()
+        
+        # Remove the temporary file
+        os.unlink(temp_path)
+        
+        # Return the PDF as a response
+        return Response(
+            content=pdf_content,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f"attachment; filename=cover_letter.pdf"
+            },
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/api/generate-cover-letter/docx")
+async def generate_cover_letter_as_docx(
+    cover_letter_data: dict = Body(...),
+):
+    """
+    Generate a DOCX file containing a cover letter.
+    
+    Args:
+        cover_letter_data (dict): Dictionary containing the cover letter content
+    
+    Returns:
+        Response: A response containing the DOCX file
+    """
+    try:
+        # Create a temporary file to store the DOCX
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as temp_file:
+            temp_path = temp_file.name
+        
+        # Generate the DOCX
+        generate_cover_letter_docx(cover_letter_data, temp_path)
+        
+        # Read the DOCX
+        with open(temp_path, "rb") as f:
+            docx_content = f.read()
+        
+        # Remove the temporary file
+        os.unlink(temp_path)
+        
+        # Return the DOCX as a response
+        return Response(
+            content=docx_content,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            headers={
+                "Content-Disposition": f"attachment; filename=cover_letter.docx"
+            },
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

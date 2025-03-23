@@ -67,3 +67,102 @@ def create_sample_pdf(file_path: str) -> None:
 
 if __name__ == "__main__":
     create_sample_pdf("../sampleResume/sample_job_description.pdf")
+
+def generate_cover_letter_pdf(cover_letter_data, output_path):
+    """
+    Generate a PDF file containing a cover letter.
+    
+    Args:
+        cover_letter_data (dict): Dictionary containing the cover letter content
+        output_path (str): Path where the PDF file should be saved
+    
+    Returns:
+        str: Path to the generated PDF file
+    """
+    pdf = PDF()
+    pdf.add_page()
+    
+    # Add sender info
+    pdf.set_font("Arial", "", 10)
+    pdf.cell(0, 5, cover_letter_data.get("sender_name", ""), 0, 1, "L")
+    pdf.cell(0, 5, cover_letter_data.get("sender_email", ""), 0, 1, "L")
+    pdf.cell(0, 5, cover_letter_data.get("sender_phone", ""), 0, 1, "L")
+    pdf.ln(5)
+    
+    # Add date
+    pdf.cell(0, 5, cover_letter_data.get("date", ""), 0, 1, "L")
+    pdf.ln(5)
+    
+    # Add recipient info
+    pdf.cell(0, 5, cover_letter_data.get("recipient_name", ""), 0, 1, "L")
+    pdf.cell(0, 5, cover_letter_data.get("recipient_company", ""), 0, 1, "L")
+    pdf.ln(10)
+    
+    # Add salutation
+    pdf.cell(0, 5, cover_letter_data.get("salutation", "Dear Hiring Manager,"), 0, 1, "L")
+    pdf.ln(5)
+    
+    # Add body paragraphs
+    pdf.set_font("Arial", "", 12)
+    body_text = cover_letter_data.get("body", "")
+    pdf.multi_cell(0, 10, body_text)
+    pdf.ln(5)
+    
+    # Add closing
+    pdf.set_font("Arial", "", 10)
+    pdf.cell(0, 5, cover_letter_data.get("closing", "Sincerely,"), 0, 1, "L")
+    pdf.ln(15)
+    pdf.cell(0, 5, cover_letter_data.get("sender_name", ""), 0, 1, "L")
+    
+    # Save the PDF
+    pdf.output(output_path)
+    return output_path
+
+def generate_cover_letter_docx(cover_letter_data, output_path):
+    """
+    Generate a DOCX file containing a cover letter.
+    
+    Args:
+        cover_letter_data (dict): Dictionary containing the cover letter content
+        output_path (str): Path where the DOCX file should be saved
+    
+    Returns:
+        str: Path to the generated DOCX file
+    """
+    from docx import Document
+    from docx.shared import Pt
+    
+    document = Document()
+    
+    # Add sender info
+    document.add_paragraph(cover_letter_data.get("sender_name", ""))
+    document.add_paragraph(cover_letter_data.get("sender_email", ""))
+    document.add_paragraph(cover_letter_data.get("sender_phone", ""))
+    document.add_paragraph()
+    
+    # Add date
+    document.add_paragraph(cover_letter_data.get("date", ""))
+    document.add_paragraph()
+    
+    # Add recipient info
+    document.add_paragraph(cover_letter_data.get("recipient_name", ""))
+    document.add_paragraph(cover_letter_data.get("recipient_company", ""))
+    document.add_paragraph()
+    
+    # Add salutation
+    document.add_paragraph(cover_letter_data.get("salutation", "Dear Hiring Manager,"))
+    document.add_paragraph()
+    
+    # Add body paragraphs
+    body_text = cover_letter_data.get("body", "")
+    document.add_paragraph(body_text)
+    document.add_paragraph()
+    
+    # Add closing
+    document.add_paragraph(cover_letter_data.get("closing", "Sincerely,"))
+    document.add_paragraph()
+    document.add_paragraph(cover_letter_data.get("sender_name", ""))
+    
+    # Save the document
+    document.save(output_path)
+    return output_path
