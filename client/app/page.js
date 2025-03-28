@@ -1,11 +1,26 @@
-import React from 'react'
-import Main from './Home Page/page'
+// import React from 'react'
+// import Main from './Home Page/page'
 
 
-export default function page() {
+// export default function page() {
+//   return (
+//     <div>
+//       <Main />
+//     </div>
+//   )
+// }
+
+
+import React from 'react';
+import '../src/apiInterceptor'; // Import the interceptor
+import Main from './Home Page/page';
+
+function App() {
   return (
-    <div>
+    <div className="app">
       <Main />
     </div>
-  )
+  );
 }
+
+export default App;

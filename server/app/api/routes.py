@@ -8,8 +8,8 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 from ..core.database import get_db
-from ..schemas import ResumeCreate, ResumeRead
-from ..models import Resume
+from schemas import ResumeCreate, ResumeRead
+from models import Resume
 from ..services.parse_resume import parse_file
 from ..services.qualification import qualification_match
 from ..services.preview_formatter import format_resume_preview
@@ -17,6 +17,7 @@ import os
 import tempfile
 from fastapi import Body
 from ..utils.pdf_generator import generate_cover_letter_pdf, generate_cover_letter_docx
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -25,7 +26,6 @@ router = APIRouter()
 async def upload_file(file: UploadFile = File(...)):
     content = parse_file(file.file, file.filename)
     return Response(content=content, media_type="application/json")
-
 
 @router.post("/api/parse-job-description")
 async def upload_job_description(description: str):

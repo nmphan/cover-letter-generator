@@ -68,6 +68,56 @@ def create_sample_pdf(file_path: str) -> None:
 if __name__ == "__main__":
     create_sample_pdf("../sampleResume/sample_job_description.pdf")
 
+# def generate_cover_letter_pdf(cover_letter_data, output_path):
+#     """
+#     Generate a PDF file containing a cover letter.
+    
+#     Args:
+#         cover_letter_data (dict): Dictionary containing the cover letter content
+#         output_path (str): Path where the PDF file should be saved
+    
+#     Returns:
+#         str: Path to the generated PDF file
+#     """
+#     pdf = PDF()
+#     pdf.add_page()
+    
+#     # Add sender info
+#     pdf.set_font("Arial", "", 10)
+#     pdf.cell(0, 5, cover_letter_data.get("sender_name", ""), 0, 1, "L")
+#     pdf.cell(0, 5, cover_letter_data.get("sender_email", ""), 0, 1, "L")
+#     pdf.cell(0, 5, cover_letter_data.get("sender_phone", ""), 0, 1, "L")
+#     pdf.ln(5)
+    
+#     # Add date
+#     pdf.cell(0, 5, cover_letter_data.get("date", ""), 0, 1, "L")
+#     pdf.ln(5)
+    
+#     # Add recipient info
+#     pdf.cell(0, 5, cover_letter_data.get("recipient_name", ""), 0, 1, "L")
+#     pdf.cell(0, 5, cover_letter_data.get("recipient_company", ""), 0, 1, "L")
+#     pdf.ln(10)
+    
+#     # Add salutation
+#     pdf.cell(0, 5, cover_letter_data.get("salutation", "Dear Hiring Manager,"), 0, 1, "L")
+#     pdf.ln(5)
+    
+#     # Add body paragraphs
+#     pdf.set_font("Arial", "", 12)
+#     body_text = cover_letter_data.get("body", "")
+#     pdf.multi_cell(0, 10, body_text)
+#     pdf.ln(5)
+    
+#     # Add closing
+#     pdf.set_font("Arial", "", 10)
+#     pdf.cell(0, 5, cover_letter_data.get("closing", "Sincerely,"), 0, 1, "L")
+#     pdf.ln(15)
+#     pdf.cell(0, 5, cover_letter_data.get("sender_name", ""), 0, 1, "L")
+    
+#     # Save the PDF
+#     pdf.output(output_path)
+#     return output_path
+
 def generate_cover_letter_pdf(cover_letter_data, output_path):
     """
     Generate a PDF file containing a cover letter.
@@ -82,37 +132,52 @@ def generate_cover_letter_pdf(cover_letter_data, output_path):
     pdf = PDF()
     pdf.add_page()
     
+    # Extract data from the nested structure
+    sender_info = cover_letter_data.get("sender_info", {})
+    resume_data = cover_letter_data.get("resume_data", {})
+    job_data = cover_letter_data.get("job_data", {})
+    
     # Add sender info
     pdf.set_font("Arial", "", 10)
-    pdf.cell(0, 5, cover_letter_data.get("sender_name", ""), 0, 1, "L")
-    pdf.cell(0, 5, cover_letter_data.get("sender_email", ""), 0, 1, "L")
-    pdf.cell(0, 5, cover_letter_data.get("sender_phone", ""), 0, 1, "L")
+    pdf.cell(0, 5, sender_info.get("name", ""), 0, 1, "L")
+    pdf.cell(0, 5, sender_info.get("email", ""), 0, 1, "L")
+    pdf.cell(0, 5, sender_info.get("phone", ""), 0, 1, "L")
     pdf.ln(5)
     
     # Add date
-    pdf.cell(0, 5, cover_letter_data.get("date", ""), 0, 1, "L")
+    pdf.cell(0, 5, sender_info.get("date", ""), 0, 1, "L")
     pdf.ln(5)
     
-    # Add recipient info
-    pdf.cell(0, 5, cover_letter_data.get("recipient_name", ""), 0, 1, "L")
-    pdf.cell(0, 5, cover_letter_data.get("recipient_company", ""), 0, 1, "L")
+    # Add recipient info (you might want to add these to your frontend data)
+    pdf.cell(0, 5, "Hiring Manager", 0, 1, "L")
+    pdf.cell(0, 5, job_data.get("company", "Company Name"), 0, 1, "L")
     pdf.ln(10)
     
     # Add salutation
-    pdf.cell(0, 5, cover_letter_data.get("salutation", "Dear Hiring Manager,"), 0, 1, "L")
+    pdf.cell(0, 5, "Dear Hiring Manager,", 0, 1, "L")
     pdf.ln(5)
+    
+    # Generate body content from resume and job data
+    body_text = f"""
+    I'm excited to apply for the position at {job_data.get("company", "your company")}. 
+    With my skills in {', '.join(resume_data.get('skills', []))}, I believe I'd be a great fit.
+    
+    My experience includes:
+    - {resume_data.get('experience', [{}])[0].get('description', 'Relevant experience')}
+    
+    I'm particularly interested in this role because {job_data.get('description', 'it aligns with my skills')}.
+    """
     
     # Add body paragraphs
     pdf.set_font("Arial", "", 12)
-    body_text = cover_letter_data.get("body", "")
     pdf.multi_cell(0, 10, body_text)
     pdf.ln(5)
     
     # Add closing
     pdf.set_font("Arial", "", 10)
-    pdf.cell(0, 5, cover_letter_data.get("closing", "Sincerely,"), 0, 1, "L")
+    pdf.cell(0, 5, "Sincerely,", 0, 1, "L")
     pdf.ln(15)
-    pdf.cell(0, 5, cover_letter_data.get("sender_name", ""), 0, 1, "L")
+    pdf.cell(0, 5, sender_info.get("name", ""), 0, 1, "L")
     
     # Save the PDF
     pdf.output(output_path)
