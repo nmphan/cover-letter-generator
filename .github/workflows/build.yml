@@ -15,9 +15,6 @@ jobs:
       contents: read
       packages: write
       id-token: write
-    defaults:
-      run:
-        working-directory: ./server
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,15 +40,14 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+        working-directory: ./server
+
   build-client:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
-    defaults:
-      run:
-        working-directory: ./client
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -77,6 +73,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+        working-directory: ./client
 
   # TODO: deploy step requires KUBECONFIG secret to be set in the repository settings
   # deploy:
