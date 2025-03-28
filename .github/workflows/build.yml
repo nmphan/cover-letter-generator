@@ -1,7 +1,6 @@
 name: Build server/client images and push to GHCR
 on:
   push:
-    branches:
     branches: ['main']
 
 env:
