@@ -3,7 +3,7 @@ import axios from 'axios';
 const API = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
     ? process.env.PROD_URL
-    : `http://${process.env.API_URL}:${process.env.API_PORT}`,
+    : `https://api.clg.srv.major.tools`,
 });
 
 // Cover Letter Endpoints

@@ -176,7 +176,7 @@ export default function Dropzone({ onTextExtracted, disabled }) {
 
     try {
       const response = await axios.post(
-        `http://${process.env.API_URL}:${process.env.API_PORT}/api/parse-resume`,
+        `https://api.clg.srv.major.tools/api/parse-resume`,
         formData,
         {
           headers: {
