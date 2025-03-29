@@ -26,7 +26,7 @@
 #     import uvicorn
 #     uvicorn.run(app, host="127.0.0.1", port=8000)
 
-
+import os
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from app.api.routes import router
