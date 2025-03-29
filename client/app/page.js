@@ -10,6 +10,7 @@
 //   )
 // }
 
+import 'dotenv/config'
 
 import React from 'react';
 import '../src/apiInterceptor'; // Import the interceptor

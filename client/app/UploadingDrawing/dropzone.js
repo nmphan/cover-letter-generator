@@ -176,7 +176,7 @@ export default function Dropzone({ onTextExtracted, disabled }) {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/parse-resume',
+        `http://${process.env.API_URL}:${process.env.API_PORT}/api/parse-resume`,
         formData,
         {
           headers: {

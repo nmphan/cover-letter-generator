@@ -71,8 +71,9 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",  # React dev server
-        "https://your-frontend-domain.com"  # Production
+        # "http://localhost:3000",  # React dev server
+        # "https://your-frontend-domain.com"  # Production
+        "*"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -85,4 +86,4 @@ app.include_router(router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=os.getenv("HOST", "0.0.0.0"), os.getenv("PORT", 8000))

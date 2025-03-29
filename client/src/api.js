@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
-    ? 'https://your-production-api.com' 
-    : 'http://localhost:8000',
+    ? process.env.PROD_URL
+    : `http://${process.env.API_URL}:${process.env.API_PORT}`,
 });
 
 // Cover Letter Endpoints

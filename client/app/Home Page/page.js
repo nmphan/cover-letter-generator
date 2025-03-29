@@ -82,7 +82,7 @@ export default function Main() {
     try {
       // 1. Parse Job Description
       const parseJobResponse = await axios.post(
-        'http://localhost:8000/api/parse-job-description',
+        `http://${process.env.API_URL}:${process.env.API_PORT}/api/parse-job-description`,
         { description: jobDescription },
         {
           headers: { 'Content-Type': 'application/json' },
@@ -96,7 +96,7 @@ export default function Main() {
 
       // 2. Generate PDF
       const pdfResponse = await axios.post(
-        'http://localhost:8000/api/generate-cover-letter/pdf',
+        `http://${process.env.API_URL}:${process.env.API_PORT}/api/generate-cover-letter/pdf`,
         {
           resume_data: resumeData,  // Use the full parsed resume object
           job_data: parseJobResponse.data,
