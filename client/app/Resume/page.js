@@ -1,43 +1,78 @@
 "use client";
+
 import React, { useState } from "react";
 import ResumePreview from "../components/ResumePreview";
+import Dropzone from "../UploadingDrawing/dropzone";
 
-export default function ResumePage() {
-  // Simulating extracted resume data (replace with real API data later)
-  const [resumeData, setResumeData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "123-456-7890",
-    skills: ["React", "Next.js", "Python", "FastAPI"],
-    education: [
-      "Diploma in Computer Engineering - SAIT (2023)",
-      "B.Tech in IT - India (2020)"
-    ],
-    experience: [
-      "Frontend Developer at XYZ Ltd (2022 - 2023)",
-      "Intern at ABC Software (2020 - 2021)"
-    ]
-  });
+const ResumePage = () => {
+  const [resumeData, setResumeData] = useState(null);
+  const [matchResult, setMatchResult] = useState(null);
+  const [jobDescription, setJobDescription] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
 
-  const handleProceed = () => {
-    // You can redirect to the cover letter page or call a backend API
-    alert("Proceeding to generate your cover letter...");
-    // Example: router.push("/generate-cover-letter");
+  const handleUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("resume", file);
+    formData.append("job_description", jobDescription);
+
+    try {
+      const res = await fetch("/api/parse-resume", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) return console.error("Server error during parsing");
+
+      const result = await res.json();
+      setResumeData(result.resume_data);
+      setMatchResult(result.matching);
+      setShowPreview(true);
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
   };
 
-  const handleEdit = () => {
-    // You can redirect to a form where the user can edit extracted info
-    alert("Redirecting to the edit page...");
-    // Example: router.push("/edit-resume-data");
+  const handleReset = () => {
+    setResumeData(null);
+    setMatchResult(null);
+    setShowPreview(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
-      <ResumePreview
-        resumeData={resumeData}
-        onProceed={handleProceed}
-        onEdit={handleEdit}
-      />
+    <div className="max-w-4xl mx-auto px-6 py-10">
+      {!showPreview ? (
+        <div className="space-y-6">
+          <Dropzone onUpload={handleUpload} />
+          <textarea
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+            placeholder="Paste job description here (optional)"
+            rows={5}
+            className="w-full border border-gray-300 rounded-md p-3"
+          />
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <ResumePreview
+            resumeData={resumeData}
+            onProceed={() => console.log("Proceed clicked")}
+            onEdit={handleReset}
+          />
+
+          {matchResult && (
+            <div className="bg-white p-6 rounded shadow">
+              <h3 className="text-lg font-semibold mb-2">Job Match Summary</h3>
+              <div className="text-sm space-y-1">
+                <p>Matched: {matchResult.matched.length}</p>
+                <p>Unmatched: {matchResult.unmatched.length}</p>
+                <p>Match Score: {matchResult.match_score}%</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default ResumePage;
