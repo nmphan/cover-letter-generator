@@ -21,13 +21,13 @@ export default function ResumePage() {
 
   const handleProceed = () => {
     // You can redirect to the cover letter page or call a backend API
-    alert("✅ Proceeding to generate your cover letter...");
+    alert("Proceeding to generate your cover letter...");
     // Example: router.push("/generate-cover-letter");
   };
 
   const handleEdit = () => {
     // You can redirect to a form where the user can edit extracted info
-    alert("📝 Redirecting to the edit page...");
+    alert("Redirecting to the edit page...");
     // Example: router.push("/edit-resume-data");
   };
 
