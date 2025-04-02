@@ -28,4 +28,8 @@ async def parse_resume(
         return JSONResponse(
             status_code=500,
             content={"error": str(e)}
+<<<<<<< Updated upstream
         )
+=======
+        )
+>>>>>>> Stashed changes
