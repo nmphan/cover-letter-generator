@@ -21,7 +21,10 @@ const ResumePage = () => {
         body: formData,
       });
 
-      if (!res.ok) return console.error("Server error during parsing");
+      if (!res.ok) {
+        console.error("Server error during parsing");
+        return;
+      }
 
       const result = await res.json();
       setResumeData(result.resume_data);
